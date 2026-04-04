@@ -9,7 +9,6 @@ export default async function handler(req, res) {
 
   const { endpoint } = req.query;
   const apiKey = process.env.ETSY_API_KEY;
-  const sharedSecret = process.env.ETSY_SHARED_SECRET;
 
   if (!endpoint) {
     return res.status(400).json({ error: 'Missing endpoint' });
@@ -18,9 +17,7 @@ export default async function handler(req, res) {
   try {
     const response = await fetch(`https://openapi.etsy.com/v3/application/${endpoint}`, {
       headers: {
-        'x-api-key': apiKey,
-        'x-api-secret': sharedSecret,
-        'Content-Type': 'application/json'
+        'x-api-key': apiKey
       }
     });
 
