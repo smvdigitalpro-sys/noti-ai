@@ -568,7 +568,7 @@ async function searchEtsy(query){
     const url=`https://noti-ai-blue.vercel.app/api/etsy?endpoint=listings/active?keywords=${encodeURIComponent(query)}&limit=12&includes=Images,Tags&api_key=${ETSY_KEY}`;
     const res=await fetch(url);
     
-    const data=res.json();
+    const data=await res.json();
     if(!data.results||data.results.length===0){showToast('No results found','#E84040');return;}
     PRODUCTS=data.results.map(l=>{
       const price=l.price?parseFloat(l.price.amount/l.price.divisor):0;
@@ -1043,7 +1043,7 @@ async function searchEtsySignals(kw){
     const url=`https://noti-ai-blue.vercel.app/api/etsy?endpoint=listings/active?keywords=${encodeURIComponent(kw)}&limit=8&includes=Tags&api_key=${ETSY_KEY}`;
     const res=await fetch(url);
     
-    const data=res.json();
+    const data=await res.json();
     if(!data.results)return;
     const items=data.results.map((l,i)=>{
       const price=l.price?parseFloat(l.price.amount/l.price.divisor):0;
