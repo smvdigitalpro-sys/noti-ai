@@ -565,7 +565,7 @@ async function searchEtsy(query){
   showToast('🔍 Loading real Etsy data...','#2E7FFF');
   document.getElementById('productsGrid').innerHTML='<div style="color:var(--text2);padding:20px;grid-column:1/-1;text-align:center">⏳ Fetching real data from Etsy...</div>';
   try{
-    const url=`https://noti-ai-blue.vercel.app/api/etsy?endpoint=listings/active?keywords=${encodeURIComponent(query)}&limit=12&includes=Images,Tags&api_key=${ETSY_KEY}`;
+    const url=`https://noti-ai-blue.vercel.app/api/etsy?endpoint=listings/active&keywords=${encodeURIComponent(query)}&limit=12&includes=Images,Tags&api_key=${ETSY_KEY}`;
     const res=await fetch(url);
     
     const data=await res.json();
@@ -1040,7 +1040,7 @@ async function searchEtsySignals(kw){
   showToast('🛍️ Loading Etsy signals...','#2E7FFF');
   document.getElementById('etsySignalsGrid').innerHTML='<div style="color:var(--text2);padding:20px;grid-column:1/-1;text-align:center">⏳ Fetching Etsy data...</div>';
   try{
-    const url=`https://noti-ai-blue.vercel.app/api/etsy?endpoint=listings/active?keywords=${encodeURIComponent(kw)}&limit=8&includes=Tags&api_key=${ETSY_KEY}`;
+    const url=`https://noti-ai-blue.vercel.app/api/etsy?endpoint=listings/active&keywords=${encodeURIComponent(kw)}&limit=8&includes=Tags&api_key=${ETSY_KEY}`;
     const res=await fetch(url);
     
     const data=await res.json();
