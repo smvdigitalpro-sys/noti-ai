@@ -566,7 +566,7 @@ async function searchEtsy(query){
   document.getElementById('productsGrid').innerHTML='<div style="color:var(--text2);padding:20px;grid-column:1/-1;text-align:center">⏳ Fetching real data from Etsy...</div>';
   try{
     const url=`https://noti-ai-blue.vercel.app/api/etsy?endpoint=listings/active?keywords=${encodeURIComponent(query)}&limit=12&includes=Images,Tags&api_key=${ETSY_KEY}`;
-    const res=await fetch(PROXY+encodeURIComponent(url));
+    const res=await fetch(url);
     
     const data=res.json();
     if(!data.results||data.results.length===0){showToast('No results found','#E84040');return;}
@@ -1041,7 +1041,7 @@ async function searchEtsySignals(kw){
   document.getElementById('etsySignalsGrid').innerHTML='<div style="color:var(--text2);padding:20px;grid-column:1/-1;text-align:center">⏳ Fetching Etsy data...</div>';
   try{
     const url=`https://noti-ai-blue.vercel.app/api/etsy?endpoint=listings/active?keywords=${encodeURIComponent(kw)}&limit=8&includes=Tags&api_key=${ETSY_KEY}`;
-    const res=await fetch(PROXY+encodeURIComponent(url));
+    const res=await fetch(url);
     
     const data=res.json();
     if(!data.results)return;
