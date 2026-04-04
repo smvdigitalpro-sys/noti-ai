@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NoTi AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F8FC;--bg2:#FFFFFF;--bg3:#F0F2F8;
+  --card:#FFFFFF;--card2:#F7F8FC;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);
+  --accent:#4F6EF7;--accent-dim:rgba(79,110,247,0.08);--accent-glow:rgba(79,110,247,0.05);
+  --green:#0D9F6E;--green-bg:rgba(13,159,110,0.08);
+  --amber:#D97706;--amber-bg:rgba(217,119,6,0.10);
+  --red:#DC2626;--red-bg:rgba(220,38,38,0.08);
+  --jarvis:#4F6EF7;--jarvis-bg:rgba(79,110,247,0.05);--jarvis-border:rgba(79,110,247,0.15);
+  --text:#111827;--text2:#6B7280;--text3:#9CA3AF;
+  --sidebar-bg:#1A1F2E;--sidebar-text:#C9D1E0;--sidebar-text2:#6B7589;--sidebar-border:rgba(255,255,255,0.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:4px}
+nav{position:fixed;top:0;left:0;right:0;height:54px;background:#FFFFFF;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:200;gap:16px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;letter-spacing:-0.5px;white-space:nowrap;color:#111827}
+.logo em{color:var(--accent);font-style:normal}
+.nav-tabs{display:flex;gap:2px;flex:1;justify-content:center}
+.tab{padding:6px 13px;border-radius:7px;font-size:13px;font-weight:500;color:#6B7280;cursor:pointer;border:none;background:none;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.tab:hover{background:#F3F4F6;color:#111827}
+.tab.active{background:var(--accent-dim);color:var(--accent);font-weight:600}
+.tab.locked-tab{opacity:0.4;cursor:not-allowed}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tier-badge{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;background:#FEF3C7;color:#D97706;border:1px solid #FDE68A;cursor:pointer;white-space:nowrap}
+.avt{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;color:#fff;flex-shrink:0}
+.layout{display:grid;grid-template-columns:210px 1fr 310px;height:100vh;padding-top:54px}
+.sidebar{background:var(--sidebar-bg);border-right:2px solid #2D3748;padding:14px 8px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.s-label{font-size:10px;font-weight:600;letter-spacing:1.2px;color:var(--sidebar-text2);text-transform:uppercase;padding:10px 10px 5px}
+.s-item{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--sidebar-text);transition:all 0.15s;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.s-item:hover{background:rgba(255,255,255,0.07);color:#FFFFFF}
+.s-item.active{background:rgba(79,110,247,0.2);color:#818CF8;border-left:2px solid #818CF8}
+.s-item.locked{opacity:0.35;cursor:not-allowed}
+.s-icon{font-size:14px;width:17px;text-align:center}
+.lock-icon{margin-left:auto;font-size:10px;opacity:0.5}
+.s-div{height:1px;background:rgba(255,255,255,0.08);margin:6px 10px}
+.main{overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px;background:#F7F8FC}
+.hero{background:#FFFFFF;border:2px solid #E5E7EB;border-radius:16px;padding:28px;animation:fu 0.35s ease both;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.hero-eye{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;opacity:0.8}
+.hero-title{font-family:'Syne',sans-serif;font-size:21px;font-weight:700;line-height:1.2;margin-bottom:16px}
+.hero-title span{color:var(--accent)}
+.search-row{display:flex;gap:8px;margin-bottom:13px}
+.search-input{flex:1;background:#FFFFFF;border:1px solid var(--border2);border-radius:9px;padding:11px 15px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.search-input::placeholder{color:var(--text3)}
+.search-input:focus{border-color:var(--accent)}
+.btn-primary{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:11px 18px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.btn-primary:hover{background:#1a6ae0;transform:translateY(-1px)}
+.qa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.qa-btn{display:flex;flex-direction:column;gap:3px;background:#FFFFFF;border:1px solid var(--border);border-radius:10px;padding:13px;cursor:pointer;transition:all 0.15s;text-align:left;font-family:'DM Sans',sans-serif;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.qa-btn:hover{border-color:var(--accent);background:var(--accent-glow);transform:translateY(-2px)}
+.qa-icon{font-size:17px;margin-bottom:2px}
+.qa-title{font-size:12px;font-weight:600;color:var(--text)}
+.qa-sub{font-size:11px;color:var(--text2);line-height:1.4}
+.filters-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;animation:fu 0.4s ease 0.05s both}
+.f-label{font-size:12px;color:var(--text2)}
+.chip{padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border2);background:var(--card);color:var(--text2);cursor:pointer;transition:all 0.12s;font-family:'DM Sans',sans-serif}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.f-select{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:5px 11px;font-size:12px;color:var(--text2);outline:none;font-family:'DM Sans',sans-serif;cursor:pointer}
+.results-hdr{display:flex;align-items:center;justify-content:space-between;animation:fu 0.4s ease 0.1s both}
+.results-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.results-count{font-size:12px;color:var(--text2);margin-top:2px}
+.sort-row{display:flex;gap:5px}
+.sort-btn{padding:5px 10px;border-radius:6px;font-size:11px;font-weight:500;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s}
+.sort-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;animation:fu 0.4s ease 0.15s both}
+.pcard{background:#FFFFFF;border:1.5px solid #E5E7EB;border-radius:12px;padding:15px;cursor:pointer;transition:all 0.18s;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.pcard:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,110,247,0.12)}
+.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.pcard.easy::before{background:var(--green)}
+.pcard.medium::before{background:var(--amber)}
+.pcard.hard::before{background:var(--red)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px}
+.card-img{width:48px;height:48px;border-radius:8px;background:#EEF2FF;border:1.5px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.score-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase}
+.score-badge.easy{background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7}
+.score-badge.medium{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}
+.score-badge.hard{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+.card-name{font-size:13px;font-weight:600;color:#111827;margin-bottom:4px;line-height:1.3}
+.card-niche{font-size:11px;color:#6B7280;margin-bottom:11px}
+.card-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px}
+.stat{background:#F9FAFB;border-radius:7px;padding:7px 9px;border:1.5px solid #E5E7EB}
+.stat-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#111827}
+.stat-val.green{color:#065F46}
+.stat-val.amber{color:#92400E}
+.stat-label{font-size:10px;color:#9CA3AF;margin-top:1px}
+.card-kws{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:11px}
+.kw{font-size:10px;padding:3px 7px;border-radius:5px;background:#EEF2FF;color:#4F46E5;border:1px solid #C7D2FE}
+.card-actions{display:flex;gap:6px}
+.btn-card{flex:1;padding:7px;border-radius:7px;font-size:11px;font-weight:600;border:1.5px solid #E5E7EB;background:#F9FAFB;color:#374151;cursor:pointer;transition:all 0.12s;font-family:'DM Sans',sans-serif}
+.btn-card:hover{border-color:var(--accent);color:var(--accent);background:#EEF2FF}
+.btn-card.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-card.primary:hover{background:#4338CA}
+.jarvis-panel{background:#FAFBFF;border-left:2px solid #E5E7EB;display:flex;flex-direction:column}
+.jarvis-locked{background:#FAFBFF;border-left:2px solid #E5E7EB;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center}
+.j-header{padding:14px 16px;border-bottom:2px solid #E5E7EB;display:flex;align-items:center;gap:10px;background:#F3F4F6}
+.j-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#818CF8);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.j-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--accent)}
+.j-status{font-size:10px;color:#9CA3AF;display:flex;align-items:center;gap:4px}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.j-msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:9px}
+.jmsg{background:#EEF2FF;border:1.5px solid #C7D2FE;border-radius:10px;padding:11px 13px;font-size:12px;line-height:1.6;color:#111827;animation:fu 0.3s ease both}
+.jmsg strong{color:var(--accent)}
+.j-lbl{font-size:10px;color:var(--accent);font-weight:600;letter-spacing:0.5px;margin-bottom:5px}
+.jmsg-user{background:#F3F4F6;border:1.5px solid #E5E7EB;border-radius:10px;padding:9px 13px;font-size:12px;color:#374151;text-align:right}
+.j-sugs{padding:9px 13px;border-top:2px solid #E5E7EB;display:flex;flex-direction:column;gap:5px}
+.j-sug-lbl{font-size:10px;color:#9CA3AF;font-weight:600;letter-spacing:0.8px;margin-bottom:2px}
+.j-sug{background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:7px;padding:7px 11px;font-size:11px;color:#374151;cursor:pointer;transition:all 0.12s;font-family:'DM Sans',sans-serif;text-align:left}
+.j-sug:hover{border-color:var(--accent);color:var(--accent);background:#EEF2FF}
+.j-input-row{padding:11px 13px;border-top:2px solid #E5E7EB;display:flex;gap:7px}
+.j-inp{flex:1;background:#FFFFFF;border:1.5px solid #E5E7EB;border-radius:8px;padding:8px 11px;font-size:12px;font-family:'DM Sans',sans-serif;color:#111827;outline:none;transition:border-color 0.15s}
+.j-inp::placeholder{color:#9CA3AF}
+.j-inp:focus{border-color:var(--accent)}
+.j-send{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:700}
+.j-send:hover{opacity:0.85}
+.lock-circle{width:56px;height:56px;border-radius:50%;background:#EEF2FF;border:2px solid #C7D2FE;display:flex;align-items:center;justify-content:center;font-size:22px}
+.lock-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#374151}
+.lock-desc{font-size:12px;color:#6B7280;line-height:1.5}
+.btn-unlock{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:4px;transition:all 0.15s}
+.btn-unlock:hover{background:#1a6ae0}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.overlay.open{display:flex}
+.modal{background:#FFFFFF;border:1px solid var(--border2);border-radius:16px;padding:26px;width:460px;max-width:92vw;animation:fu 0.25s ease both;box-shadow:0 20px 60px rgba(0,0,0,0.15)}
+.modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:5px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:15px;text-align:center;cursor:pointer;transition:all 0.15s}
+.price-card:hover{border-color:var(--accent);background:var(--accent-glow)}
+.price-card.featured{border-color:var(--accent);background:var(--accent-dim)}
+.price-name{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:0.8px;margin-bottom:6px}
+.price-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:3px}
+.price-per{font-size:10px;color:var(--text3)}
+.price-feats{margin-top:10px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.pf{font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px}
+.pf::before{content:'✓';color:var(--green);font-weight:700;font-size:10px}
+.pf.no{color:var(--text3)}
+.pf.no::before{content:'✕';color:var(--text3)}
+.btn-close{width:100%;padding:10px;border-radius:9px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.12s}
+.btn-close:hover{background:var(--card);color:var(--text)}
+.listing-modal{width:560px}
+.l-section{margin-bottom:14px}
+.l-lbl{font-size:10px;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.l-val{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:11px;font-size:12px;color:var(--text);line-height:1.6}
+.l-tags{display:flex;flex-wrap:wrap;gap:5px}
+.l-tag{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(46,127,255,0.2);border-radius:5px;padding:4px 9px;font-size:11px}
+.btn-row{display:flex;gap:8px}
+.btn-sec{flex:1;padding:10px;border-radius:9px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.12s}
+.btn-sec:hover{border-color:var(--accent);color:var(--accent)}
+.btn-post{flex:1;padding:10px;border-radius:9px;border:none;background:var(--green);color:#fff;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.12s}
+.btn-post:hover{background:#17a36b}
+.tier-menu{position:fixed;top:58px;right:16px;background:#FFFFFF;border:1px solid var(--border2);border-radius:10px;padding:5px;z-index:300;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:180px}
+.tier-menu.open{display:block}
+.tier-opt{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 13px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--text2);transition:all 0.12s}
+.tier-opt:hover{background:var(--card);color:var(--text)}
+.tier-opt.active{color:var(--accent)}
+.tier-price{font-size:11px;color:var(--text3);font-weight:600}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--green);color:#fff;padding:11px 17px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;transform:translateY(70px);opacity:0;transition:all 0.3s ease;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">No<em>Ti</em> AI</div>
+  <div class="nav-tabs">
+    <button class="tab active" onclick="switchTab('research',this)">Research</button>
+    <button class="tab" onclick="switchTab('trends',this)">Trends</button>
+    <button class="tab locked-tab" onclick="openUpgrade()">Listings 🔒</button>
+    <button class="tab locked-tab" onclick="openUpgrade()">Analytics 🔒</button>
+    <button class="tab locked-tab" onclick="openUpgrade()">Mockup-uri 🔒</button>
+  </div>
+  <div class="nav-right">
+    <div class="tier-badge" id="tierBadge" onclick="toggleTierMenu()">Starter · $9.99</div>
+    <div class="avt">M</div>
+  </div>
+</nav>
+
+<div class="tier-menu" id="tierMenu">
+  <div class="tier-opt active" onclick="setTier('starter')">Starter <span class="tier-price">$9.99/month</span></div>
+  <div class="tier-opt" onclick="setTier('pro')">Pro <span class="tier-price">$29/month</span></div>
+  <div class="tier-opt" onclick="setTier('jarvis')">Pro + Jarvis <span class="tier-price">$69/month</span></div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="s-label">Starter</div>
+    <button class="s-item active" onclick="switchSection('research',this)"><span class="s-icon">🔍</span>Explore Niches</button>
+    <button class="s-item" onclick="switchSection('competitors',this)"><span class="s-icon">📊</span>Competitors</button>
+    <button class="s-item" onclick="switchSection('keywords',this)"><span class="s-icon">🔑</span>Keywords</button>
+    <div class="s-div"></div>
+    <div class="s-label">Pro</div>
+    <button class="s-item locked" onclick="openUpgrade()"><span class="s-icon">📅</span>Calendar<span class="lock-icon">🔒</span></button>
+    <button class="s-item locked" onclick="openUpgrade()"><span class="s-icon">🚀</span>Listings AI<span class="lock-icon">🔒</span></button>
+    <button class="s-item locked" onclick="openUpgrade()"><span class="s-icon">🎨</span>Mockups<span class="lock-icon">🔒</span></button>
+    <button class="s-item locked" onclick="openUpgrade()"><span class="s-icon">📈</span>Analytics<span class="lock-icon">🔒</span></button>
+    <div class="s-div"></div>
+    <div class="s-label">Pro + Jarvis</div>
+    <button class="s-item locked" onclick="openUpgrade()"><span class="s-icon">🤖</span>Jarvis AI<span class="lock-icon">🔒</span></button>
+    <button class="s-item locked" onclick="openUpgrade()"><span class="s-icon">💡</span>Profit Guide<span class="lock-icon">🔒</span></button>
+    <div class="s-div"></div>
+    <button class="s-item"><span class="s-icon">⚙️</span>Settings</button>
+  </div>
+
+  <div class="main" id="researchPage">
+    <div class="hero">
+      <div class="hero-eye">Research MVP · Phase 1</div>
+      <div class="hero-title">What do you want to <span>sell on Etsy?</span></div>
+      <div class="search-row">
+        <input class="search-input" id="searchInput" placeholder="Ex: personalized jewelry, stickers, printables..."/>
+        <button class="btn-primary" onclick="doSearch()">Search niche →</button>
+      </div>
+      <div class="qa-grid">
+        <button class="qa-btn" onclick="quickAction('profit')">
+          <div class="qa-icon">💰</div>
+          <div class="qa-title">Find profitable product</div>
+          <div class="qa-sub">1 click · I analyze the market for you</div>
+        </button>
+        <button class="qa-btn" onclick="quickAction('competition')">
+          <div class="qa-icon">🏆</div>
+          <div class="qa-title">Analyze competition</div>
+          <div class="qa-sub">1 click · See what the best sellers do</div>
+        </button>
+        <button class="qa-btn" onclick="quickAction('listing')">
+          <div class="qa-icon">✍️</div>
+          <div class="qa-title">Generate full listing</div>
+          <div class="qa-sub">Pro · Title + description + 13 tags</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="filters-row">
+      <span class="f-label">Filters:</span>
+      <button class="chip active" onclick="filterProducts('all',this)">All</button>
+      <button class="chip" onclick="filterProducts('easy',this)">Easy competition</button>
+      <button class="chip" onclick="filterProducts('medium',this)">Medium competition</button>
+      <button class="chip" onclick="filterProducts('revenue',this)">High revenue</button>
+      <select class="f-select">
+        <option>All categories</option>
+        <option>Jewelry</option>
+        <option>Printables</option>
+        <option>Home Decor</option>
+        <option>Stickers</option>
+      </select>
+    </div>
+
+    <div class="results-hdr">
+      <div>
+        <div class="results-title">Research Results</div>
+        <div class="results-count" id="rCount">8 products found · Niche: Personalized Jewelry</div>
+      </div>
+      <div class="sort-row">
+        <button class="sort-btn active" onclick="sortBy('sales',this)">Sales</button>
+        <button class="sort-btn" onclick="sortBy('revenue',this)">Revenue</button>
+        <button class="sort-btn" onclick="sortBy('easy',this)">Competition</button>
+      </div>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+
+  <!-- TRENDS PAGE -->
+  <div class="main" id="trendsPage" style="display:none">
+    <div class="hero">
+      <div class="hero-eye">Trends · Phase 5</div>
+      <div class="hero-title">What's trending <span>right now?</span></div>
+      <div class="search-row">
+        <input class="search-input" id="trendInput" placeholder="Ex: personalized jewelry, stickers, wall art..."/>
+        <button class="btn-primary" onclick="loadTrends()">Search trends →</button>
+      </div>
+      <div class="qa-grid">
+        <button class="qa-btn" onclick="loadTrendKeyword('personalized gifts')">
+          <div class="qa-icon">🎁</div>
+          <div class="qa-title">Personalized Gifts</div>
+          <div class="qa-sub">Trending on Pinterest & Google</div>
+        </button>
+        <button class="qa-btn" onclick="loadTrendKeyword('digital stickers')">
+          <div class="qa-icon">🌸</div>
+          <div class="qa-title">Digital Stickers</div>
+          <div class="qa-sub">+67% searches this month</div>
+        </button>
+        <button class="qa-btn" onclick="loadTrendKeyword('wall art printable')">
+          <div class="qa-icon">🖼️</div>
+          <div class="qa-title">Wall Art Printable</div>
+          <div class="qa-sub">Evergreen + seasonal peak</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Source tabs -->
+    <div class="filters-row">
+      <span class="f-label">Source:</span>
+      <button class="chip active" onclick="switchSource('google',this)">📈 Google Trends</button>
+      <button class="chip" onclick="switchSource('pinterest',this)">📌 Pinterest</button>
+      <button class="chip" onclick="switchSource('etsy',this)">🛍️ Etsy Signals</button>
+    </div>
+
+    <!-- Google Trends embed -->
+    <div id="googleTrendsSection">
+      <div class="results-hdr">
+        <div>
+          <div class="results-title">📈 Google Trends</div>
+          <div class="results-count" id="trendCount">Search interest over time · worldwide</div>
+        </div>
+      </div>
+      <div id="googleTrendsEmbed" style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;min-height:400px;display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center;color:var(--text2);padding:40px">
+          <div style="font-size:40px;margin-bottom:12px">📈</div>
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px">Google Trends</div>
+          <div style="font-size:13px;margin-bottom:16px">Search a keyword to see trend data</div>
+          <button class="btn-primary" onclick="loadTrendKeyword('personalized jewelry')">Try: personalized jewelry</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pinterest section -->
+    <div id="pinterestSection" style="display:none">
+      <div class="results-hdr">
+        <div>
+          <div class="results-title">📌 Pinterest Trends</div>
+          <div class="results-count">Top trending searches on Pinterest</div>
+        </div>
+      </div>
+      <div class="products-grid" id="pinterestGrid"></div>
+    </div>
+
+    <!-- Etsy signals section -->
+    <div id="etsySignalsSection" style="display:none">
+      <div class="results-hdr">
+        <div>
+          <div class="results-title">🛍️ Etsy Market Signals</div>
+          <div class="results-count">Favorites & competition data from Etsy listings</div>
+        </div>
+      </div>
+      <div class="products-grid" id="etsySignalsGrid"></div>
+    </div>
+
+  </div>
+
+  <!-- KEYWORDS PAGE -->
+  <div class="main" id="keywordsPage" style="display:none">
+    <div class="hero">
+      <div class="hero-eye">Keywords · Starter</div>
+      <div class="hero-title">Find the <span>perfect keyword</span></div>
+      <div class="search-row">
+        <input class="search-input" id="kwInput" placeholder="Ex: personalized necklace, wall art, digital planner..."/>
+        <button class="btn-primary" onclick="analyzeKeyword()">Analyze →</button>
+      </div>
+      <div class="qa-grid">
+        <button class="qa-btn" onclick="quickKw('personalized jewelry')"><div class="qa-icon">💍</div><div class="qa-title">Personalized Jewelry</div><div class="qa-sub">High demand · medium competition</div></button>
+        <button class="qa-btn" onclick="quickKw('digital stickers')"><div class="qa-icon">🌸</div><div class="qa-title">Digital Stickers</div><div class="qa-sub">Growing fast · easy competition</div></button>
+        <button class="qa-btn" onclick="quickKw('wall art printable')"><div class="qa-icon">🖼️</div><div class="qa-title">Wall Art Printable</div><div class="qa-sub">Evergreen · high volume</div></button>
+      </div>
+    </div>
+
+    <!-- Main keyword result -->
+    <div id="kwResult" style="display:none">
+      <div class="results-hdr" style="margin-bottom:12px">
+        <div><div class="results-title" id="kwResultTitle">🔑 Keyword Analysis</div><div class="results-count" id="kwResultSub"></div></div>
+        <div class="score-badge easy" id="kwScoreBadge" style="font-size:13px;padding:6px 14px"></div>
+      </div>
+
+      <!-- Score cards -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px" id="kwScoreCards"></div>
+
+      <!-- Seasonality bar -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:12px">📅 SEASONALITY</div>
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;height:60px" id="seasonalityChart"></div>
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:4px">
+          ${['J','F','M','A','M','J','J','A','S','O','N','D'].map(m=>`<div style="font-size:9px;color:var(--text3);text-align:center">${m}</div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Related keywords -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:12px">🔗 RELATED KEYWORDS</div>
+        <div id="relatedKws" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <!-- Jarvis recommendation -->
+      <div style="background:var(--jarvis-bg);border:1px solid var(--jarvis-border);border-radius:12px;padding:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--jarvis);letter-spacing:1px;margin-bottom:8px">🤖 JARVIS RECOMMENDATION</div>
+        <div id="kwJarvisRec" style="font-size:13px;color:var(--text);line-height:1.6"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPETITORS PAGE -->
+  <div class="main" id="competitorsPage" style="display:none">
+    <div class="hero">
+      <div class="hero-eye">Competitors · Starter</div>
+      <div class="hero-title">Analyze your <span>competition</span></div>
+      <div class="search-row">
+        <input class="search-input" id="compInput" placeholder="Ex: personalized jewelry, wall art, digital stickers..."/>
+        <button class="btn-primary" onclick="searchCompetitors()">Search →</button>
+      </div>
+      <div class="qa-grid">
+        <button class="qa-btn" onclick="quickComp('personalized jewelry')"><div class="qa-icon">💍</div><div class="qa-title">Personalized Jewelry</div><div class="qa-sub">Top shops · prices · strategies</div></button>
+        <button class="qa-btn" onclick="quickComp('digital stickers')"><div class="qa-icon">🌸</div><div class="qa-title">Digital Stickers</div><div class="qa-sub">See what's working</div></button>
+        <button class="qa-btn" onclick="quickComp('wall art printable')"><div class="qa-icon">🖼️</div><div class="qa-title">Wall Art Printable</div><div class="qa-sub">Best sellers analysis</div></button>
+      </div>
+    </div>
+
+    <!-- Niche overview -->
+    <div id="compOverview" style="display:none">
+      <div class="results-hdr" style="margin-bottom:12px">
+        <div>
+          <div class="results-title" id="compTitle">📊 Competitor Analysis</div>
+          <div class="results-count" id="compSub">Top shops in this niche</div>
+        </div>
+        <div style="display:flex;gap:8px" id="compScoreCards"></div>
+      </div>
+
+      <!-- Niche stats bar -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px" id="compNicheStats"></div>
+
+      <!-- Competitors grid -->
+      <div style="font-size:11px;font-weight:700;color:#6B7280;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">TOP COMPETITORS</div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="compGrid"></div>
+
+      <!-- Strategy tips -->
+      <div style="background:#EEF2FF;border:1.5px solid #C7D2FE;border-radius:12px;padding:16px;margin-top:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:12px">💡 HOW TO BEAT THEM</div>
+        <div id="compStrategy" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+      </div>
+    </div>
+  </div>
+    <div class="lock-title">Jarvis AI</div>
+    <div class="lock-desc">Your personal assistant that guides you step by step to profit. Available in the <strong style="color:var(--text)">Pro + Jarvis · $69/month</strong> plan.</div>
+    <button class="btn-unlock" onclick="openUpgrade()">Unlock Jarvis →</button>
+  </div>
+
+  <div class="jarvis-panel" id="jarvisPanel" style="display:none">
+    <div class="j-header">
+      <div class="j-avatar">🤖</div>
+      <div>
+        <div class="j-name">Jarvis AI</div>
+        <div class="j-status"><span class="sdot"></span>Online · Pro + Jarvis</div>
+      </div>
+    </div>
+    <div class="j-msgs" id="jMsgs">
+      <div class="jmsg">
+        <div class="j-lbl">JARVIS</div>
+        Hi! I analyzed the <strong>personalized jewelry</strong> niche. Competition is medium-easy, average revenue per shop is <strong>$2,100/month</strong>. I identified 3 high-potential products. Where do we start?
+      </div>
+    </div>
+    <div class="j-sugs">
+      <div class="j-sug-lbl">QUICK ACTIONS</div>
+      <button class="j-sug" onclick="jAction(0)">🔍 Analyze first product</button>
+      <button class="j-sug" onclick="jAction(1)">✍️ Generate listing for it</button>
+      <button class="j-sug" onclick="jAction(2)">🔑 Best keywords</button>
+    </div>
+    <div class="j-input-row">
+      <input class="j-inp" id="jInput" placeholder="Ask Jarvis..." onkeydown="if(event.key==='Enter')sendJarvis()"/>
+      <button class="j-send" onclick="sendJarvis()">↑</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPGRADE MODAL -->
+<div class="overlay" id="upgradeModal" onclick="if(event.target===this)closeUpgrade()">
+  <div class="modal">
+    <div class="modal-title">Choose your plan</div>
+    <div class="modal-sub">Unlock advanced features and scale your Etsy business.</div>
+    <div class="pricing-grid">
+      <div class="price-card" onclick="setTier('starter');closeUpgrade()">
+        <div class="price-name">STARTER</div>
+        <div class="price-val">$9.99</div>
+        <div class="price-per">/month</div>
+        <div class="price-feats">
+          <div class="pf">Full Research</div>
+          <div class="pf">Chrome Extension</div>
+          <div class="pf">Keywords + score</div>
+          <div class="pf no">Listings AI</div>
+          <div class="pf no">Jarvis AI</div>
+        </div>
+      </div>
+      <div class="price-card featured" onclick="setTier('pro');closeUpgrade()">
+        <div class="price-name">PRO ⭐</div>
+        <div class="price-val">$29</div>
+        <div class="price-per">/month</div>
+        <div class="price-feats">
+          <div class="pf">Everything in Starter</div>
+          <div class="pf">Bulk Listings AI</div>
+          <div class="pf">Seasonal Calendar</div>
+          <div class="pf">Shop Analytics</div>
+          <div class="pf no">Jarvis AI</div>
+        </div>
+      </div>
+      <div class="price-card" onclick="setTier('jarvis');closeUpgrade()">
+        <div class="price-name">PRO + JARVIS</div>
+        <div class="price-val">$69</div>
+        <div class="price-per">/month</div>
+        <div class="price-feats">
+          <div class="pf">Everything in Pro</div>
+          <div class="pf">Personal Jarvis AI</div>
+          <div class="pf">Profit Guide</div>
+          <div class="pf">AI Mockups</div>
+          <div class="pf">Multi-platform</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-close" onclick="closeUpgrade()">Stay on current plan</button>
+  </div>
+</div>
+
+<!-- LISTING MODAL -->
+<div class="overlay" id="listingModal" onclick="if(event.target===this)closeListingModal()">
+  <div class="modal listing-modal">
+    <div class="modal-title">✍️ AI Generated Listing</div>
+    <div class="modal-sub" id="listingProduct"></div>
+    <div class="l-section">
+      <div class="l-lbl">SEO Title</div>
+      <div class="l-val" id="lTitle"></div>
+    </div>
+    <div class="l-section">
+      <div class="l-lbl">Description</div>
+      <div class="l-val" id="lDesc"></div>
+    </div>
+    <div class="l-section">
+      <div class="l-lbl">13 SEO Tags</div>
+      <div class="l-tags" id="lTags"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-sec" onclick="closeListingModal()">Edit</button>
+      <button class="btn-post" onclick="postEtsy()">Publish on Etsy →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ETSY_KEY='rc4hng8bnlxtirhb1x23dsu2';
+const PROXY='https://api.allorigins.win/get?url=';
+let currentTier='starter';
+let PRODUCTS=[];
+
+const NICHE_EMOJIS={jewelry:'💍',printables:'🖼️',stickers:'🌸','home decor':'🪞','home & living':'🕯️',stationery:'💌',accessories:'📿',default:'🛍️'};
+function getEmoji(tags=[]){
+  const t=tags.join(' ').toLowerCase();
+  for(const[k,v]of Object.entries(NICHE_EMOJIS))if(t.includes(k))return v;
+  return NICHE_EMOJIS.default;
+}
+function getDifficulty(numFavorers){
+  if(numFavorers<500)return'easy';
+  if(numFavorers<2000)return'medium';
+  return'hard';
+}
+function estSales(numFavorers){return Math.round(numFavorers*0.08);}
+function estRevenue(sales,price){return Math.round(sales*price);}
+
+async function searchEtsy(query){
+  showToast('🔍 Loading real Etsy data...','#2E7FFF');
+  document.getElementById('productsGrid').innerHTML='<div style="color:var(--text2);padding:20px;grid-column:1/-1;text-align:center">⏳ Fetching real data from Etsy...</div>';
+  try{
+    const url=`https://openapi.etsy.com/v3/application/listings/active?keywords=${encodeURIComponent(query)}&limit=12&includes=Images,Tags&api_key=${ETSY_KEY}`;
+    const res=await fetch(PROXY+encodeURIComponent(url));
+    const json=await res.json();
+    const data=JSON.parse(json.contents);
+    if(!data.results||data.results.length===0){showToast('No results found','#E84040');return;}
+    PRODUCTS=data.results.map(l=>{
+      const price=l.price?parseFloat(l.price.amount/l.price.divisor):0;
+      const favs=l.num_favorers||0;
+      const sales=estSales(favs);
+      const rev=estRevenue(sales,price);
+      const tags=l.tags||[];
+      const diff=getDifficulty(favs);
+      return{
+        id:l.listing_id,
+        e:getEmoji(tags),
+        name:l.title.substring(0,60),
+        niche:l.taxonomy_path?l.taxonomy_path[0]:'General',
+        d:diff,
+        sales,rev,
+        price:Math.round(price*100)/100,
+        kws:tags.slice(0,3),
+        favs,
+        url:`https://www.etsy.com/listing/${l.listing_id}`,
+        img:l.images&&l.images[0]?l.images[0].url_75x75:null
+      };
+    });
+    document.getElementById('rCount').textContent=`${PRODUCTS.length} real products found · Niche: ${query}`;
+    renderProducts(PRODUCTS);
+    showToast(`✓ ${PRODUCTS.length} real Etsy products loaded!`,'#1DB87A');
+  }catch(err){
+    console.error(err);
+    showToast('API error — check console','#E84040');
+    document.getElementById('productsGrid').innerHTML='<div style="color:var(--red);padding:20px;grid-column:1/-1;text-align:center">❌ Could not load Etsy data. Check API key or CORS.</div>';
+  }
+}
+
+function renderProducts(list){
+  document.getElementById('productsGrid').innerHTML=list.map((p,i)=>`
+    <div class="pcard ${p.d}" style="animation-delay:${i*0.04}s">
+      <div class="card-top">
+        <div class="card-img">${p.img?`<img src="${p.img}" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`:p.e}</div>
+        <div class="score-badge ${p.d}">${p.d==='easy'?'Easy':p.d==='medium'?'Medium':'Hard'}</div>
+      </div>
+      <div class="card-name">${p.name}</div>
+      <div class="card-niche">${p.niche} · ❤️ ${p.favs||0} favorites</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val green">${p.sales} <span style="font-size:9px;color:var(--text3)">est.</span></div><div class="stat-label">Sales/month</div></div>
+        <div class="stat"><div class="stat-val amber">$${p.rev.toLocaleString()} <span style="font-size:9px;color:var(--text3)">est.</span></div><div class="stat-label">Revenue/month</div></div>
+        <div class="stat"><div class="stat-val">$${p.price}</div><div class="stat-label">Real price</div></div>
+        <div class="stat"><div class="stat-val">${p.favs||0}</div><div class="stat-label">Favorites</div></div>
+      </div>
+      <div class="card-kws">${(p.kws||[]).map(k=>`<span class="kw">${k}</span>`).join('')}</div>
+      <div class="card-actions">
+        <button class="btn-card" onclick="window.open('${p.url}','_blank')">View on Etsy</button>
+        <button class="btn-card primary" onclick="generateListing('${p.name.replace(/'/g,"\\'")}','${p.e}')">Listing →</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterProducts(type,btn){
+  document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  if(type==='all'){renderProducts(PRODUCTS);document.getElementById('rCount').textContent=`${PRODUCTS.length} products found`;return;}
+  if(type==='easy'){const f=PRODUCTS.filter(p=>p.d==='easy');renderProducts(f);document.getElementById('rCount').textContent=`${f.length} products · easy competition`;return;}
+  if(type==='medium'){const f=PRODUCTS.filter(p=>p.d==='medium');renderProducts(f);document.getElementById('rCount').textContent=`${f.length} products · medium competition`;return;}
+  if(type==='revenue'){const f=[...PRODUCTS].sort((a,b)=>b.rev-a.rev);renderProducts(f);document.getElementById('rCount').textContent='Sorted by revenue';return;}
+}
+function sortBy(type,btn){
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  let s=[...PRODUCTS];
+  if(type==='sales')s.sort((a,b)=>b.sales-a.sales);
+  if(type==='revenue')s.sort((a,b)=>b.rev-a.rev);
+  if(type==='easy')s.sort((a,b)=>a.d.localeCompare(b.d));
+  renderProducts(s);
+}
+function doSearch(){
+  const v=document.getElementById('searchInput').value.trim();
+  if(!v)return;
+  searchEtsy(v);
+}
+function quickAction(type){
+  if(type==='profit'){searchEtsy('personalized jewelry');}
+  else if(type==='competition'){searchEtsy('printables digital download');}
+  else if(type==='listing'){if(currentTier==='starter'){openUpgrade();return;}generateListing(PRODUCTS[0]?.name||'Product',PRODUCTS[0]?.e||'🛍️');}
+}
+
+// Load default niche on startup
+searchEtsy('personalized jewelry');
+function generateListing(name,emoji){
+  if(currentTier==='starter'){openUpgrade();return;}
+  document.getElementById('listingProduct').textContent=emoji+' '+name;
+  document.getElementById('lTitle').textContent='Custom Name Necklace | 925 Silver Hand Engraved Jewelry | Anniversary Gift | Delicate Personalized Chain for Her';
+  document.getElementById('lDesc').textContent='An elegant necklace, hand engraved with the name or message of your choice. Perfect as a gift for someone special. Made from authentic 925 silver, durable and hypoallergenic. Delivery in 3–5 days with gift packaging included.';
+  document.getElementById('lTags').innerHTML=TAGS.map(t=>`<span class="l-tag">${t}</span>`).join('');
+  document.getElementById('listingModal').classList.add('open');
+}
+function closeListingModal(){document.getElementById('listingModal').classList.remove('open')}
+function postEtsy(){closeListingModal();showToast('✓ Listing published on Etsy!');}
+function openUpgrade(){document.getElementById('upgradeModal').classList.add('open')}
+function closeUpgrade(){document.getElementById('upgradeModal').classList.remove('open')}
+function setTier(tier){
+  currentTier=tier;
+  const labels={starter:'Starter · $9.99',pro:'Pro · $29',jarvis:'Pro+Jarvis · $69'};
+  document.getElementById('tierBadge').textContent=labels[tier];
+  document.getElementById('tierMenu').classList.remove('open');
+  const jp=document.getElementById('jarvisPanel'),jl=document.getElementById('jarvisLocked');
+  const tabs=document.querySelectorAll('.nav-tabs .tab');
+  if(tier==='jarvis'){jp.style.cssText='display:flex;flex-direction:column';jl.style.display='none';tabs.forEach(t=>{t.classList.remove('locked-tab')});showToast('🤖 Jarvis activated!','#00D8FF');}
+  else if(tier==='pro'){jp.style.display='none';jl.style.display='flex';showToast('⭐ Pro plan activated!','#2E7FFF');}
+  else{jp.style.display='none';jl.style.display='flex';showToast('✓ Starter plan active','#888');}
+  document.querySelectorAll('.tier-opt').forEach((o,i)=>{o.classList.remove('active');if((tier==='starter'&&i===0)||(tier==='pro'&&i===1)||(tier==='jarvis'&&i===2))o.classList.add('active');});
+}
+function toggleTierMenu(){document.getElementById('tierMenu').classList.toggle('open')}
+document.addEventListener('click',e=>{if(!e.target.closest('#tierMenu')&&!e.target.closest('#tierBadge'))document.getElementById('tierMenu').classList.remove('open');});
+const JREPLIES=[
+  'I analyzed the product. Profitability score <strong>8.2/10</strong>. Enter with a price between $22–$30 and target long-tail keywords. Main competitors have under 200 reviews — easy to beat.',
+  'Top sellers use white backgrounds and titles with 3-4 main keywords. You can beat the competition with faster personalization and more reviews.',
+  'I generated 13 tags optimized for the Etsy 2026 algorithm. The first 3 are the most important. Want me to generate the full description too?',
+];
+let jIdx=0;
+function jAction(i){addJMsg(JREPLIES[i%JREPLIES.length]);}
+function sendJarvis(){
+  const inp=document.getElementById('jInput'),v=inp.value.trim();if(!v)return;
+  const msgs=document.getElementById('jMsgs');
+  msgs.innerHTML+=`<div class="jmsg-user">${v}</div>`;inp.value='';
+  setTimeout(()=>{addJMsg(JREPLIES[jIdx%JREPLIES.length]);jIdx++;},600);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+function addJMsg(text){
+  const msgs=document.getElementById('jMsgs');
+  msgs.innerHTML+=`<div class="jmsg"><div class="j-lbl">JARVIS</div>${text}</div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+}
+function showToast(msg,color='#1DB87A'){
+  const t=document.getElementById('toast');t.textContent=msg;t.style.background=color;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);
+}
+// SECTION SWITCHING (sidebar)
+function switchSection(section, btn){
+  document.querySelectorAll('.s-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const pages=['researchPage','keywordsPage','competitorsPage'];
+  pages.forEach(p=>{const el=document.getElementById(p);if(el)el.style.display='none';});
+  if(section==='keywords'){document.getElementById('keywordsPage').style.display='flex';}
+  else if(section==='competitors'){document.getElementById('competitorsPage').style.display='flex';}
+  else{document.getElementById('researchPage').style.display='flex';}
+}
+
+// COMPETITORS ENGINE
+const COMP_DATA={
+  'personalized jewelry':{
+    avgPrice:24,avgReviews:1240,avgFavs:890,topTags:['custom necklace','personalized gift','name necklace','silver jewelry','gift for her'],
+    shops:[
+      {name:'SilverNameCo',sales:4200,rev:98000,reviews:3840,favs:12400,price:23,tags:['custom necklace','name jewelry','personalized'],strategy:'Fast shipping + gift wrapping',score:92},
+      {name:'PersonalizedByMia',sales:2800,rev:61600,reviews:2100,favs:8200,price:22,tags:['personalized jewelry','custom name','silver chain'],strategy:'Bundle deals + free engraving',score:87},
+      {name:'GoldenThreadShop',sales:1900,rev:53200,reviews:1560,favs:5800,price:28,tags:['gold necklace','luxury gift','custom jewelry'],strategy:'Premium positioning + fast turnaround',score:81},
+      {name:'CharmingLetters',sales:1400,rev:25200,reviews:980,favs:3200,price:18,tags:['letter necklace','initial charm','dainty jewelry'],strategy:'Low price + volume',score:72},
+    ],
+    gaps:['Under 7-day delivery','Video in listings','Free gift box','Reviews response <1h','Bundle 2+1 offer']
+  },
+  'digital stickers':{
+    avgPrice:4,avgReviews:680,avgFavs:420,topTags:['planner stickers','digital download','cute stickers','goodnotes','ipad stickers'],
+    shops:[
+      {name:'StickerStudioCo',sales:8900,rev:35600,reviews:5200,favs:18000,price:4,tags:['planner stickers','digital download','cute'],strategy:'Huge bundle packs + free previews',score:95},
+      {name:'PastelPlannerCo',sales:5600,rev:22400,reviews:3100,favs:11000,price:4,tags:['pastel stickers','goodnotes','aesthetic'],strategy:'Aesthetic branding + Pinterest presence',score:88},
+      {name:'DigitalDoodleCo',sales:3200,rev:12800,reviews:1800,favs:6200,price:4,tags:['digital stickers','ipad','procreate'],strategy:'Tutorial videos + community',score:79},
+      {name:'SimplyStickerShop',sales:1800,rev:7200,reviews:920,favs:3100,price:4,tags:['minimal stickers','clean design','planner'],strategy:'Minimal aesthetic niche',score:68},
+    ],
+    gaps:['GoodNotes 6 compatible','iPhone widget stickers','Seasonal packs','Custom orders','Video demos']
+  },
+  'wall art printable':{
+    avgPrice:8,avgReviews:920,avgFavs:670,topTags:['printable wall art','digital download','home decor','boho print','gallery wall'],
+    shops:[
+      {name:'PrintableNestCo',sales:6200,rev:49600,reviews:4100,favs:14000,price:8,tags:['wall art','printable','home decor'],strategy:'200+ designs + instant download',score:91},
+      {name:'BohoWallStudio',sales:3800,rev:30400,reviews:2400,favs:9000,price:8,tags:['boho art','earth tones','minimal'],strategy:'Boho niche focus + Pinterest',score:85},
+      {name:'ModernPrintCo',sales:2100,rev:16800,reviews:1300,favs:4800,price:8,tags:['modern art','abstract','gallery wall'],strategy:'Gallery wall sets + bundle',score:76},
+      {name:'KidsRoomPrints',sales:1500,rev:13500,reviews:880,favs:3200,price:9,tags:['nursery art','kids room','cute animals'],strategy:'Kids niche + gift market',score:71},
+    ],
+    gaps:['A1/A0 sizes','Frame mockup photos','Room mockup previews','Seasonal collections','Color customization']
+  }
+};
+
+function quickComp(kw){
+  document.getElementById('compInput').value=kw;
+  searchCompetitors();
+}
+
+function searchCompetitors(){
+  const kw=document.getElementById('compInput').value.trim();
+  if(!kw)return;
+  showToast('📊 Analyzing competitors...','#4F6EF7');
+  const key=Object.keys(COMP_DATA).find(k=>kw.toLowerCase().includes(k.split(' ')[0]))||Object.keys(COMP_DATA)[0];
+  const d=COMP_DATA[key];
+
+  document.getElementById('compOverview').style.display='block';
+  document.getElementById('compTitle').textContent=`📊 "${kw}" — Competitor Analysis`;
+  document.getElementById('compSub').textContent=`Top ${d.shops.length} shops analyzed · estimated data`;
+
+  // Niche stats
+  document.getElementById('compNicheStats').innerHTML=[
+    {label:'Avg Price',val:`$${d.avgPrice}`,sub:'per listing',color:'#4F6EF7'},
+    {label:'Avg Reviews',val:d.avgReviews.toLocaleString(),sub:'per top shop',color:'#065F46'},
+    {label:'Avg Favorites',val:d.avgFavs.toLocaleString(),sub:'per top shop',color:'#92400E'},
+    {label:'Top Tags',val:d.topTags.length,sub:'most used keywords',color:'#4F6EF7'},
+  ].map(s=>`
+    <div style="background:#FFFFFF;border:1.5px solid #E5E7EB;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:${s.color}">${s.val}</div>
+      <div style="font-size:12px;font-weight:600;color:#111827;margin-top:2px">${s.label}</div>
+      <div style="font-size:10px;color:#9CA3AF;margin-top:1px">${s.sub}</div>
+    </div>`).join('');
+
+  // Competitors
+  document.getElementById('compGrid').innerHTML=d.shops.map((s,i)=>`
+    <div style="background:#FFFFFF;border:1.5px solid #E5E7EB;border-radius:12px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.05);transition:all 0.15s" onmouseover="this.style.borderColor='#4F6EF7'" onmouseout="this.style.borderColor='#E5E7EB'">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:40px;height:40px;border-radius:50%;background:#EEF2FF;border:2px solid #C7D2FE;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Syne',sans-serif;color:#4F6EF7;font-size:14px">${i+1}</div>
+          <div>
+            <div style="font-weight:700;font-size:14px;color:#111827">${s.name}</div>
+            <div style="font-size:11px;color:#6B7280">Strategy: ${s.strategy}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="background:${s.score>=85?'#D1FAE5':s.score>=70?'#FEF3C7':'#FEE2E2'};color:${s.score>=85?'#065F46':s.score>=70?'#92400E':'#991B1B'};border:1px solid ${s.score>=85?'#6EE7B7':s.score>=70?'#FDE68A':'#FCA5A5'};border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700">Score ${s.score}</div>
+          <button class="btn-card" style="padding:5px 10px;font-size:11px" onclick="window.open('https://www.etsy.com/shop/${s.name}','_blank')">View Shop →</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
+        <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:7px;padding:8px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#065F46">${s.sales.toLocaleString()}</div>
+          <div style="font-size:9px;color:#9CA3AF;margin-top:1px">Sales/mo <span style="color:#9CA3AF;font-size:8px">est.</span></div>
+        </div>
+        <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:7px;padding:8px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#92400E">$${(s.rev/1000).toFixed(0)}K <span style="font-size:9px;color:#9CA3AF">est.</span></div>
+          <div style="font-size:9px;color:#9CA3AF;margin-top:1px">Revenue/mo</div>
+        </div>
+        <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:7px;padding:8px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#4F6EF7">⭐ ${s.reviews.toLocaleString()}</div>
+          <div style="font-size:9px;color:#9CA3AF;margin-top:1px">Reviews</div>
+        </div>
+        <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:7px;padding:8px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#111827">$${s.price}</div>
+          <div style="font-size:9px;color:#9CA3AF;margin-top:1px">Avg price</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        ${s.tags.map(t=>`<span style="background:#EEF2FF;color:#4F46E5;border:1px solid #C7D2FE;border-radius:5px;padding:3px 8px;font-size:10px">${t}</span>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // Strategy tips
+  document.getElementById('compStrategy').innerHTML=d.gaps.map(g=>`
+    <div style="background:#FFFFFF;border:1.5px solid #C7D2FE;border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px">
+      <span style="color:#065F46;font-weight:700;font-size:14px">✓</span>
+      <span style="font-size:12px;color:#111827">${g}</span>
+    </div>`).join('');
+
+  showToast(`✓ ${d.shops.length} competitors analyzed!`);
+}
+
+document.getElementById('compInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')searchCompetitors()});
+
+// KEYWORDS ENGINE
+const KW_DATA={
+  'personalized jewelry':{volume:18400,competition:62,ctr:3.8,season:[55,48,60,65,70,72,68,65,75,85,95,100],score:78},
+  'digital stickers':{volume:12800,competition:38,ctr:4.2,season:[60,55,65,70,75,80,85,80,75,70,72,68],score:85},
+  'wall art printable':{volume:24600,competition:71,ctr:3.1,season:[70,65,75,80,85,82,78,75,80,85,90,100],score:72},
+  'custom necklace':{volume:15200,competition:55,ctr:4.0,season:[50,45,55,65,70,68,65,60,70,80,92,100],score:80},
+  'planner stickers':{volume:9800,competition:42,ctr:3.9,season:[100,85,70,65,60,55,58,65,80,75,70,68],score:76},
+};
+
+function getKwData(kw){
+  const lower=kw.toLowerCase();
+  if(KW_DATA[lower])return KW_DATA[lower];
+  // Generate realistic estimates for unknown keywords
+  const vol=Math.floor(Math.random()*20000)+3000;
+  const comp=Math.floor(Math.random()*60)+25;
+  const score=Math.floor((vol/1000*2)+(100-comp))/3;
+  return{volume:vol,competition:comp,ctr:+(2.5+Math.random()*2.5).toFixed(1),season:[65,60,68,72,78,80,75,70,74,82,90,100],score:Math.min(Math.floor(score),99)};
+}
+
+function getScoreClass(score){return score>=75?'easy':score>=50?'medium':'hard';}
+function getScoreLabel(score){return score>=75?'Great':'medium'>=50?'OK':'Hard';}
+
+function quickKw(kw){
+  document.getElementById('kwInput').value=kw;
+  analyzeKeyword();
+}
+
+function analyzeKeyword(){
+  const kw=document.getElementById('kwInput').value.trim();
+  if(!kw)return;
+  showToast('🔑 Analyzing keyword...','#2E7FFF');
+  const d=getKwData(kw);
+  const sc=getScoreClass(d.score);
+
+  document.getElementById('kwResult').style.display='block';
+  document.getElementById('kwResultTitle').textContent=`🔑 "${kw}"`;
+  document.getElementById('kwResultSub').textContent=`Keyword analysis · estimated data`;
+  document.getElementById('kwScoreBadge').textContent=`Score ${d.score}/100`;
+  document.getElementById('kwScoreBadge').className=`score-badge ${sc}`;
+
+  // Score cards
+  document.getElementById('kwScoreCards').innerHTML=[
+    {label:'Search Volume',val:d.volume.toLocaleString(),sub:'searches/month est.',color:'green'},
+    {label:'Competition',val:d.competition+'/100',sub:d.competition<50?'Low — great!':d.competition<70?'Medium':'High',color:d.competition<50?'green':d.competition<70?'amber':'red'},
+    {label:'CTR',val:d.ctr+'%',sub:'avg click-through rate',color:'amber'},
+    {label:'Keyword Score',val:d.score+'/100',sub:d.score>=75?'Excellent opportunity':d.score>=50?'Worth trying':'Very competitive',color:sc==='easy'?'green':sc==='medium'?'amber':'red'},
+  ].map(c=>`
+    <div class="stat" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px">
+      <div class="stat-val ${c.color}" style="font-size:18px">${c.val}</div>
+      <div class="stat-label" style="font-size:11px;margin-top:3px">${c.label}</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">${c.sub}</div>
+    </div>`).join('');
+
+  // Seasonality
+  const max=Math.max(...d.season);
+  document.getElementById('seasonalityChart').innerHTML=d.season.map((v,i)=>{
+    const h=Math.round((v/max)*100);
+    const isPeak=v===max;
+    return`<div style="display:flex;flex-direction:column;justify-content:flex-end;height:100%">
+      <div style="height:${h}%;background:${isPeak?'var(--green)':'var(--accent)'};border-radius:3px 3px 0 0;opacity:${0.4+h/150};transition:height 0.5s ease ${i*0.04}s"></div>
+    </div>`;}).join('');
+
+  // Related keywords
+  const words=kw.split(' ');
+  const related=[
+    {kw:'custom '+words[words.length-1],vol:Math.floor(d.volume*0.6),comp:d.competition-8,score:d.score+5},
+    {kw:kw+' gift',vol:Math.floor(d.volume*0.8),comp:d.competition-5,score:d.score+3},
+    {kw:kw+' handmade',vol:Math.floor(d.volume*0.4),comp:d.competition-15,score:d.score+8},
+    {kw:'personalized '+words[words.length-1],vol:Math.floor(d.volume*0.9),comp:d.competition+5,score:d.score-4},
+    {kw:kw+' for her',vol:Math.floor(d.volume*0.5),comp:d.competition-10,score:d.score+6},
+  ].map(r=>({...r,score:Math.min(Math.max(r.score,10),99),comp:Math.min(Math.max(r.comp,5),99)}));
+
+  document.getElementById('relatedKws').innerHTML=related.map(r=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer" onclick="quickKw('${r.kw}')">
+      <div style="flex:1;font-size:12px;color:var(--text)">${r.kw}</div>
+      <div style="font-size:11px;color:var(--text2);min-width:80px">${r.vol.toLocaleString()} searches</div>
+      <div style="width:60px;height:5px;background:var(--border);border-radius:4px">
+        <div style="width:${r.score}%;height:100%;background:${getScoreClass(r.score)==='easy'?'var(--green)':getScoreClass(r.score)==='medium'?'var(--amber)':'var(--red)'};border-radius:4px"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:${getScoreClass(r.score)==='easy'?'var(--green)':getScoreClass(r.score)==='medium'?'var(--amber)':'var(--red)'};min-width:28px">${r.score}</div>
+      <button class="btn-card" style="padding:4px 8px;font-size:10px" onclick="event.stopPropagation();quickKw('${r.kw}')">→</button>
+    </div>`).join('');
+
+  // Jarvis recommendation
+  const rec=d.score>=75
+    ?`<strong style="color:var(--jarvis)">"${kw}"</strong> is an excellent keyword! High search volume with manageable competition. Use it as your <strong>primary tag</strong> in the listing title. Pair it with "${kw} gift" and "custom ${words[words.length-1]}" for maximum reach. Peak season: <strong>November–December</strong> — prepare inventory early.`
+    :d.score>=50
+    ?`<strong style="color:var(--jarvis)">"${kw}"</strong> has decent potential but competition is high. Focus on <strong>long-tail variations</strong> like "${kw} gift" or "handmade ${kw}" which have lower competition. Your best entry point is the related keywords section above.`
+    :`<strong style="color:var(--jarvis)">"${kw}"</strong> is very competitive. Consider niching down — try more specific variations like "custom ${words[words.length-1]} for mom" or "personalized ${words[words.length-1]} name". These have lower competition and higher conversion rates.`;
+  document.getElementById('kwJarvisRec').innerHTML=rec;
+
+  showToast('✓ Keyword analyzed!');
+}
+
+document.getElementById('kwInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')analyzeKeyword()});
+function switchTab(tab, btn){
+  document.querySelectorAll('.nav-tabs .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const research=document.getElementById('researchPage');
+  const trends=document.getElementById('trendsPage');
+  const kp=document.getElementById('keywordsPage');
+  [research,trends,kp].forEach(p=>{if(p)p.style.display='none'});
+  if(tab==='research'){research.style.display='flex';}
+  else if(tab==='trends'){trends.style.display='flex';}
+}
+
+// TRENDS
+let currentSource='google';
+function switchSource(src, btn){
+  currentSource=src;
+  document.querySelectorAll('#trendsPage .chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('googleTrendsSection').style.display=src==='google'?'block':'none';
+  document.getElementById('pinterestSection').style.display=src==='pinterest'?'block':'none';
+  document.getElementById('etsySignalsSection').style.display=src==='etsy'?'block':'none';
+}
+
+function loadTrends(){
+  const v=document.getElementById('trendInput').value.trim();
+  if(!v)return;
+  loadTrendKeyword(v);
+}
+
+function loadTrendKeyword(kw){
+  document.getElementById('trendInput').value=kw;
+  document.getElementById('trendCount').textContent=`Search interest over time · "${kw}" · worldwide`;
+  
+  if(currentSource==='google'||currentSource==='google'){
+    // Google Trends iframe embed
+    const encoded=encodeURIComponent(kw);
+    document.getElementById('googleTrendsEmbed').innerHTML=`
+      <div style="width:100%;padding:20px">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
+          <div style="font-size:11px;color:var(--accent);font-weight:600;letter-spacing:1px;margin-bottom:10px">GOOGLE TRENDS · "${kw}"</div>
+          <iframe src="https://trends.google.com/trends/embed/explore/TIMESERIES?req=%7B%22comparisonItem%22%3A%5B%7B%22keyword%22%3A%22${encoded}%22%2C%22geo%22%3A%22%22%2C%22time%22%3A%22today%2012-m%22%7D%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&tz=-120&lang=en" 
+            width="100%" height="300" frameborder="0" style="border-radius:8px"></iframe>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          ${getTrendCards(kw)}
+        </div>
+        <div style="margin-top:12px;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px">
+          <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:8px">📌 PINTEREST TRENDS</div>
+          <a href="https://trends.pinterest.com/?country=US&term=${encoded}" target="_blank" 
+            style="color:var(--jarvis);font-size:12px;text-decoration:none">
+            → View "${kw}" on Pinterest Trends ↗
+          </a>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">Opens Pinterest Trends in new tab</div>
+        </div>
+      </div>`;
+  }
+  
+  if(currentSource==='etsy'){
+    searchEtsySignals(kw);
+  }
+  
+  if(currentSource==='pinterest'){
+    renderPinterestTrends(kw);
+  }
+}
+
+function getTrendCards(kw){
+  const words=kw.split(' ');
+  const related=[
+    {kw:kw+' gift',score:92,trend:'↑'},
+    {kw:kw+' handmade',score:78,trend:'↑'},
+    {kw:'personalized '+words[0],score:85,trend:'↑'},
+    {kw:words[0]+' ideas',score:71,trend:'→'},
+    {kw:kw+' etsy',score:88,trend:'↑'},
+    {kw:'custom '+words[0],score:94,trend:'↑'},
+  ];
+  return related.map(r=>`
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px">
+      <div style="font-size:11px;color:var(--text2);margin-bottom:6px">${r.kw}</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="flex:1;height:4px;background:var(--border);border-radius:4px">
+          <div style="width:${r.score}%;height:100%;background:var(--accent);border-radius:4px"></div>
+        </div>
+        <span style="font-size:11px;font-weight:700;color:${r.trend==='↑'?'var(--green)':'var(--amber)'}">${r.trend} ${r.score}</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderPinterestTrends(kw){
+  const trends=[
+    {title:'Personalized Jewelry 2026',pins:'2.4M',growth:'+34%',img:'💍'},
+    {title:'Aesthetic Wall Art Prints',pins:'1.8M',growth:'+28%',img:'🖼️'},
+    {title:'Minimalist Home Decor',pins:'3.1M',growth:'+19%',img:'🪴'},
+    {title:'Digital Planners & Stickers',pins:'980K',growth:'+67%',img:'📓'},
+    {title:'Handmade Gift Ideas',pins:'2.2M',growth:'+22%',img:'🎁'},
+    {title:'Custom Name Products',pins:'1.5M',growth:'+41%',img:'✨'},
+  ];
+  document.getElementById('pinterestGrid').innerHTML=trends.map((t,i)=>`
+    <div class="pcard easy" style="animation-delay:${i*0.05}s">
+      <div class="card-top">
+        <div class="card-img">${t.img}</div>
+        <div class="score-badge easy">Hot</div>
+      </div>
+      <div class="card-name">${t.title}</div>
+      <div class="card-niche">Pinterest · ${t.pins} pins</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val green">${t.growth}</div><div class="stat-label">Growth</div></div>
+        <div class="stat"><div class="stat-val amber">${t.pins}</div><div class="stat-label">Total pins</div></div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-card primary" onclick="window.open('https://pinterest.com/search/pins/?q=${encodeURIComponent(t.title)}','_blank')">View on Pinterest</button>
+      </div>
+    </div>`).join('');
+}
+
+async function searchEtsySignals(kw){
+  showToast('🛍️ Loading Etsy signals...','#2E7FFF');
+  document.getElementById('etsySignalsGrid').innerHTML='<div style="color:var(--text2);padding:20px;grid-column:1/-1;text-align:center">⏳ Fetching Etsy data...</div>';
+  try{
+    const url=`https://openapi.etsy.com/v3/application/listings/active?keywords=${encodeURIComponent(kw)}&limit=8&includes=Tags&api_key=${ETSY_KEY}`;
+    const res=await fetch(PROXY+encodeURIComponent(url));
+    const json=await res.json();
+    const data=JSON.parse(json.contents);
+    if(!data.results)return;
+    const items=data.results.map((l,i)=>{
+      const price=l.price?parseFloat(l.price.amount/l.price.divisor):0;
+      const favs=l.num_favorers||0;
+      return`<div class="pcard ${getDifficulty(favs)}" style="animation-delay:${i*0.04}s">
+        <div class="card-top"><div class="card-img">🛍️</div><div class="score-badge ${getDifficulty(favs)}">${getDifficulty(favs)}</div></div>
+        <div class="card-name">${l.title.substring(0,55)}</div>
+        <div class="card-niche">❤️ ${favs} favorites · $${Math.round(price*100)/100}</div>
+        <div class="card-stats">
+          <div class="stat"><div class="stat-val green">${estSales(favs)} <span style="font-size:9px;color:var(--text3)">est.</span></div><div class="stat-label">Sales/mo</div></div>
+          <div class="stat"><div class="stat-val amber">$${estRevenue(estSales(favs),price).toLocaleString()} <span style="font-size:9px;color:var(--text3)">est.</span></div><div class="stat-label">Revenue</div></div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-card primary" onclick="window.open('https://www.etsy.com/listing/${l.listing_id}','_blank')">View on Etsy</button>
+        </div>
+      </div>`;
+    });
+    document.getElementById('etsySignalsGrid').innerHTML=items.join('');
+    showToast(`✓ ${items.length} Etsy signals loaded!`);
+  }catch(e){
+    document.getElementById('etsySignalsGrid').innerHTML='<div style="color:var(--text2);padding:20px;grid-column:1/-1;text-align:center">⚠️ Etsy data requires backend proxy. Works after Node.js setup.</div>';
+  }
+}
+
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});
+document.getElementById('trendInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')loadTrends()});
+</script>
+</body>
+</html>
