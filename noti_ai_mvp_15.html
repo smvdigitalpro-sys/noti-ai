@@ -44,23 +44,23 @@ nav{position:fixed;top:0;left:0;right:0;height:54px;background:#FFFFFF;border-bo
 .lock-icon{margin-left:auto;font-size:10px;opacity:0.5}
 .s-div{height:1px;background:rgba(255,255,255,0.08);margin:6px 10px}
 .main{overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px;background:#F7F8FC;min-width:0}
-.hero{background:#FFFFFF;border:2px solid #E5E7EB;border-radius:16px;padding:28px;animation:fu 0.35s ease both;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.hero{background:#FFFFFF;border:2px solid #E5E7EB;border-radius:16px;padding:18px 20px;animation:fu 0.35s ease both;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
 @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .hero-eye{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;opacity:0.8}
-.hero-title{font-family:'Syne',sans-serif;font-size:21px;font-weight:700;line-height:1.2;margin-bottom:16px}
+.hero-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;line-height:1.2;margin-bottom:12px}
 .hero-title span{color:var(--accent)}
-.search-row{display:flex;gap:8px;margin-bottom:13px}
+.search-row{display:flex;gap:8px;margin-bottom:10px}
 .search-input{flex:1;background:#FFFFFF;border:1px solid var(--border2);border-radius:9px;padding:11px 15px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
 .search-input::placeholder{color:var(--text3)}
 .search-input:focus{border-color:var(--accent)}
 .btn-primary{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:11px 18px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;white-space:nowrap}
 .btn-primary:hover{background:#1a6ae0;transform:translateY(-1px)}
-.qa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.qa-btn{display:flex;flex-direction:column;gap:3px;background:#FFFFFF;border:1px solid var(--border);border-radius:10px;padding:13px;cursor:pointer;transition:all 0.15s;text-align:left;font-family:'DM Sans',sans-serif;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.qa-btn{display:flex;flex-direction:column;gap:2px;background:#FFFFFF;border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;transition:all 0.15s;text-align:left;font-family:'DM Sans',sans-serif;box-shadow:0 1px 3px rgba(0,0,0,0.05);min-height:86px}
 .qa-btn:hover{border-color:var(--accent);background:var(--accent-glow);transform:translateY(-2px)}
 .qa-icon{font-size:17px;margin-bottom:2px}
-.qa-title{font-size:12px;font-weight:600;color:var(--text)}
-.qa-sub{font-size:11px;color:var(--text2);line-height:1.4}
+.qa-title{font-size:11px;font-weight:700;color:var(--text)}
+.qa-sub{font-size:10px;color:var(--text2);line-height:1.35}
 .filters-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;animation:fu 0.4s ease 0.05s both}
 .f-label{font-size:12px;color:var(--text2)}
 .chip{padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border2);background:var(--card);color:var(--text2);cursor:pointer;transition:all 0.12s;font-family:'DM Sans',sans-serif}
@@ -165,6 +165,7 @@ nav{position:fixed;top:0;left:0;right:0;height:54px;background:#FFFFFF;border-bo
 .jarvis-close:hover{background:#E5E7EB;color:#111827}
 @media (max-width: 900px){.jarvis-chat{right:12px;left:12px;bottom:88px;width:auto;height:min(70vh,560px)}.jarvis-fab{right:12px;bottom:12px}}
 
+@media (max-width: 1100px){.qa-grid{grid-template-columns:1fr}.hero{padding:16px}.hero-title{font-size:17px}}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .overlay.open{display:flex}
 .modal{background:#FFFFFF;border:1px solid var(--border2);border-radius:16px;padding:26px;width:460px;max-width:92vw;animation:fu 0.25s ease both;box-shadow:0 20px 60px rgba(0,0,0,0.15)}
@@ -613,21 +614,65 @@ function getDifficulty(numFavorers){
 function estSales(numFavorers){return Math.round(numFavorers*0.08);}
 function estRevenue(sales,price){return Math.round(sales*price);}
 
+
 const SEARCH_SYNONYMS={
-  pet:['dog','cat','pet portrait','pet memorial','pet lover'],
-  mug:['coffee mug','ceramic mug','funny mug','gift mug'],
+  pet:['dog','cat','pet portrait','pet memorial','pet lover','dog portrait','cat portrait'],
+  mug:['coffee mug','ceramic mug','funny mug','gift mug','custom mug'],
   jewelry:['necklace','bracelet','ring','earrings','personalized jewelry'],
   stickers:['digital stickers','planner stickers','cute stickers','goodnotes stickers'],
   printable:['digital download','wall art printable','planner printable','template'],
   wall:['wall art','gallery wall','home decor','printable wall art'],
-  art:['wall art','printable art','home decor','poster']
+  art:['wall art','printable art','poster','canvas','illustration'],
+  portrait:['custom portrait','family portrait','pet portrait','couple portrait','watercolor portrait','digital portrait','portrait print','portrait poster'],
+  portret:['custom portrait','family portrait','pet portrait','digital portrait','portrait print'],
+  custom:['personalized','custom made','engraved','name gift']
 };
+
+const INTENT_MAP=[
+  {
+    id:'portrait',
+    include:['portrait','portret','custom portrait','family portrait','pet portrait','couple portrait','digital portrait','portrait print','portrait poster','wall art','poster','canvas','illustration','printable'],
+    exclude:['necklace','bracelet','ring','earrings','jewelry','collar','mug'],
+    categories:['Art & Collectibles','Home & Living'],
+    queryTerms:['custom portrait','family portrait','pet portrait','digital portrait']
+  },
+  {
+    id:'pet',
+    include:['pet','dog','cat','puppy','kitten','animal','pet portrait','pet memorial','dog portrait','cat portrait','dog collar'],
+    exclude:['wedding','invitation'],
+    categories:['Pet Supplies','Art & Collectibles','Home & Living'],
+    queryTerms:['pet','dog','cat','pet portrait']
+  },
+  {
+    id:'jewelry',
+    include:['jewelry','necklace','bracelet','ring','earrings','pendant','birthstone','engraved necklace'],
+    exclude:['poster','printable','canvas','portrait'],
+    categories:['Jewelry'],
+    queryTerms:['personalized jewelry','necklace','bracelet']
+  },
+  {
+    id:'mug',
+    include:['mug','coffee mug','ceramic mug','cup','tumbler'],
+    exclude:['necklace','bracelet'],
+    categories:['Home & Living'],
+    queryTerms:['custom mug','coffee mug','funny mug']
+  },
+  {
+    id:'printable',
+    include:['printable','digital download','template','planner','wall art printable'],
+    exclude:['necklace','bracelet','ring'],
+    categories:['Art & Collectibles','Craft Supplies & Tools','Home & Living'],
+    queryTerms:['printable','digital download','template']
+  }
+];
+
 let LAST_QUERY='personalized jewelry';
 let CURRENT_FILTER='all';
 let CURRENT_SORT='sales';
 let LAST_RAW_PRODUCTS=[];
+let LAST_INTENT=null;
 
-function normalizeText(v=''){return v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+function normalizeText(v=''){return v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9\s&-]/g,' ').replace(/\s+/g,' ').trim();}
 function parsePrice(raw){
   if(raw==null)return 0;
   if(typeof raw==='number')return raw;
@@ -636,42 +681,81 @@ function parsePrice(raw){
   return 0;
 }
 function getSearchMode(){return document.getElementById('searchMode')?.value||'related';}
+function wordsOf(query){return normalizeText(query).split(/\s+/).filter(Boolean);}
+function detectIntent(query){
+  const q=normalizeText(query);
+  const words=wordsOf(query);
+  let best=null;
+  let bestScore=0;
+  for(const intent of INTENT_MAP){
+    let score=0;
+    intent.include.forEach(term=>{if(q.includes(normalizeText(term))) score += term.includes(' ')?5:3;});
+    words.forEach(w=>{if(intent.include.some(term=>normalizeText(term).split(' ').includes(w))) score += 2;});
+    if(score>bestScore){best=intent;bestScore=score;}
+  }
+  return bestScore>=3 ? best : null;
+}
 function getBaseTerms(query){
   const q=normalizeText(query);
-  const words=q.split(/\s+/).filter(Boolean);
-  const bag=new Set(words);
-  words.forEach(w=>{(SEARCH_SYNONYMS[w]||[]).forEach(t=>bag.add(normalizeText(t)))});
-  if(q.includes('pet')) ['dog','cat','animal','pet portrait','pet memorial'].forEach(t=>bag.add(t));
-  return [...bag];
+  const words=wordsOf(query);
+  const bag=new Set([q]);
+  words.forEach(w=>{
+    bag.add(w);
+    (SEARCH_SYNONYMS[w]||[]).forEach(t=>bag.add(normalizeText(t)));
+  });
+  const intent=detectIntent(query);
+  if(intent) intent.include.forEach(t=>bag.add(normalizeText(t)));
+  return [...bag].filter(Boolean);
 }
 function buildQueries(query){
   const mode=getSearchMode();
-  const base=query.trim();
-  const terms=getBaseTerms(base).filter(t=>t!==normalizeText(base));
-  if(mode==='exact') return [base];
-  if(mode==='related') return [base, ...terms.slice(0,3)].slice(0,4);
-  return [base, ...terms.slice(0,5)].slice(0,6);
+  const base=normalizeText(query);
+  const intent=detectIntent(query);
+  const intentTerms=intent ? intent.queryTerms.map(normalizeText) : [];
+  const terms=[...new Set([base, ...intentTerms, ...getBaseTerms(query)])].filter(Boolean);
+  if(mode==='exact') return terms.slice(0,1);
+  if(mode==='related') return terms.slice(0,4);
+  return terms.slice(0,6);
+}
+function listingCategory(raw){
+  return normalizeText((raw.taxonomy_path&&raw.taxonomy_path.join(' ')) || raw.niche || '');
+}
+function titleAndTags(raw){
+  return normalizeText((raw.title||'')+' '+(raw.tags||[]).join(' ')+' '+listingCategory(raw));
 }
 function relevanceScore(listing, query){
   const q=normalizeText(query);
-  const title=normalizeText(listing.title||'');
-  const tags=(listing.tags||[]).map(normalizeText);
-  const niche=normalizeText((listing.taxonomy_path&&listing.taxonomy_path[0])||listing.niche||'');
-  const exactTerms=q.split(/\s+/).filter(Boolean);
-  const relatedTerms=getBaseTerms(query);
+  const hay=titleAndTags(listing);
+  const words=wordsOf(query);
+  const baseTerms=getBaseTerms(query);
+  const intent=detectIntent(query);
   let score=0;
-  exactTerms.forEach(t=>{
-    if(title.includes(t)) score+=20;
-    if(tags.some(tag=>tag.includes(t))) score+=10;
-    if(niche.includes(t)) score+=6;
+
+  if(hay.includes(q)) score += 40;
+  words.forEach(w=>{
+    if(hay.includes(w)) score += 16;
+    if((listing.title||'').toLowerCase().startsWith(w)) score += 6;
   });
-  relatedTerms.forEach(t=>{
-    if(title.includes(t)) score+=6;
-    if(tags.some(tag=>tag.includes(t))) score+=4;
-    if(niche.includes(t)) score+=2;
-  });
-  if(exactTerms[0] && title.startsWith(exactTerms[0])) score+=8;
+  baseTerms.forEach(t=>{ if(t!==q && hay.includes(t)) score += t.includes(' ')?8:4; });
+
+  if(intent){
+    intent.include.forEach(t=>{ if(hay.includes(normalizeText(t))) score += t.includes(' ')?10:5; });
+    intent.exclude.forEach(t=>{ if(hay.includes(normalizeText(t))) score -= 28; });
+    const cat=listingCategory(listing);
+    if(intent.categories.some(c=>cat.includes(normalizeText(c)))) score += 10;
+  }
+
+  if(words.length>=2 && words.every(w=>hay.includes(w))) score += 18;
   return score;
+}
+function matchesIntent(listing, query){
+  const intent=detectIntent(query);
+  if(!intent) return true;
+  const hay=titleAndTags(listing);
+  const hasInclude=intent.include.some(t=>hay.includes(normalizeText(t)));
+  const hasExclude=intent.exclude.some(t=>hay.includes(normalizeText(t)));
+  if(intent.id==='portrait') return hasInclude && !hasExclude;
+  return hasInclude && !(hasExclude && !normalizeText(query).includes('jewelry'));
 }
 function estimateAgeDays(raw){
   const candidates=[raw.create_timestamp,raw.original_creation_tsz,raw.creation_tsz,raw.created_timestamp,raw.created_tsz,raw.state_tsz];
@@ -685,12 +769,14 @@ function estimateAgeDays(raw){
     }
   }
   const favs=raw.num_favorers||0;
-  if(favs>5000) return 720;
-  if(favs>2500) return 365;
-  if(favs>1000) return 180;
-  if(favs>300) return 120;
-  if(favs>100) return 60;
-  if(favs>30) return 30;
+  const reviews=Number(raw.shop_total_rating_count || raw.rating_count || 0);
+  const signal=favs + reviews*4;
+  if(signal>5000) return 720;
+  if(signal>2500) return 365;
+  if(signal>1200) return 180;
+  if(signal>500) return 120;
+  if(signal>150) return 60;
+  if(signal>50) return 30;
   return 14;
 }
 function ageLabel(days){
@@ -698,33 +784,34 @@ function ageLabel(days){
   if(days<365) return Math.round(days/30)+'m';
   return (days/365).toFixed(1).replace('.0','')+'y';
 }
-function estimateSales(favs, ageDays, relevance){
+function estimateSales(favs, ageDays, relevance, reviews){
   const ageMonths=Math.max(1, ageDays/30);
-  return Math.max(1, Math.round((favs*0.18)/ageMonths + relevance*0.35));
+  return Math.max(1, Math.round((favs*0.12)/ageMonths + (reviews||0)*1.8 + relevance*0.3));
 }
-function getCompetitionFromSignals(favs, relevance, position){
-  const score=favs + Math.max(0, 150 - position*2) + relevance*8;
-  if(score<350) return 'easy';
-  if(score<1800) return 'medium';
-  return 'hard';
+function getCompetitionFromSignals(favs, relevance, position, reviews){
+  const score=favs + (reviews||0)*8 + Math.max(0, 160 - position*2) + relevance*7;
+  if(score<500)return'easy';
+  if(score<2200)return'medium';
+  return'hard';
 }
 function badgeFromSignals(p){
-  if((p.favs>=3000 && p.position<=12) || p.sales>=140) return 'Best Seller';
-  if((p.favs>=700 && p.position<=24) || p.sales>=60) return 'Popular';
-  if(p.ageDays<=30 && p.favs>=20) return 'New';
+  if((p.favs>=3000 && p.position<=12) || p.sales>=180 || p.reviews>=120) return 'Best Seller';
+  if((p.favs>=700 && p.position<=24) || p.sales>=70 || p.reviews>=40) return 'Popular';
+  if(p.ageDays<=30 && (p.favs>=20 || p.reviews>=5)) return 'New';
   if(p.ageDays<=90 && p.sales>=25) return 'Rising';
   return '—';
 }
 function mapListing(raw, query, idx){
   const price=parsePrice(raw.price);
   const favs=Number(raw.num_favorers||0);
+  const reviews=Number(raw.shop_total_rating_count || raw.rating_count || 0);
   const tags=raw.tags||[];
   const relevance=relevanceScore(raw, query);
   const ageDays=estimateAgeDays(raw);
-  const sales=estimateSales(favs, ageDays, relevance);
+  const sales=estimateSales(favs, ageDays, relevance, reviews);
   const rev=Math.round(sales*price);
   const position=idx+1;
-  const difficulty=getCompetitionFromSignals(favs, relevance, position);
+  const difficulty=getCompetitionFromSignals(favs, relevance, position, reviews);
   return {
     id:raw.listing_id,
     raw,
@@ -737,6 +824,7 @@ function mapListing(raw, query, idx){
     price:Math.round(price*100)/100,
     kws:tags.slice(0,3),
     favs,
+    reviews,
     url:`https://www.etsy.com/listing/${raw.listing_id}`,
     img:raw.images&&raw.images[0]?raw.images[0].url_75x75:null,
     relevance,
@@ -754,11 +842,12 @@ async function fetchQuery(query, limit=40){
 }
 async function searchEtsy(query){
   LAST_QUERY=query;
-  showToast('🔍 Loading Etsy API + relevance engine...','#2E7FFF');
-  document.getElementById('productsGrid').innerHTML='<div class="empty-state">⏳ Loading real Etsy data and ranking relevance...</div>';
+  LAST_INTENT=detectIntent(query);
+  showToast('🔍 Loading Etsy API + intent engine...','#2E7FFF');
+  document.getElementById('productsGrid').innerHTML='<div class="empty-state">⏳ Loading Etsy data and cleaning relevance...</div>';
   try{
     const queries=buildQueries(query);
-    const perQuery=Math.max(20, Math.ceil(100/queries.length));
+    const perQuery=Math.max(18, Math.ceil(100/queries.length));
     const results=await Promise.all(queries.map(q=>fetchQuery(q, perQuery)));
     const merged=[];
     const seen=new Set();
@@ -774,13 +863,15 @@ async function searchEtsy(query){
       return;
     }
     LAST_RAW_PRODUCTS=merged;
+    const strictThreshold = LAST_INTENT ? (LAST_INTENT.id==='portrait' ? 22 : 14) : 10;
     PRODUCTS=merged
       .map((item,idx)=>mapListing(item, query, idx))
-      .filter(p=>p.relevance>=8 || getSearchMode()==='broad')
-      .sort((a,b)=>b.relevance-a.relevance || b.favs-a.favs)
+      .filter(p=>matchesIntent(p.raw, query))
+      .filter(p=>p.relevance>=strictThreshold || getSearchMode()==='broad')
+      .sort((a,b)=>b.relevance-a.relevance || b.favs-a.favs || a.ageDays-b.ageDays)
       .slice(0,100)
       .map((p,idx)=>({ ...p, position: idx+1 }))
-      .map(p=>({ ...p, badge: badgeFromSignals(p), d:getCompetitionFromSignals(p.favs,p.relevance,p.position) }));
+      .map(p=>({ ...p, badge: badgeFromSignals(p), d:getCompetitionFromSignals(p.favs,p.relevance,p.position,p.reviews) }));
     applyCurrentFilters();
     showToast(`✓ ${PRODUCTS.length} ranked Etsy listings loaded`,'#1DB87A');
   }catch(err){
@@ -798,7 +889,7 @@ function renderProducts(list){
   wrap.innerHTML=`<table class="results-table">
 <thead>
 <tr>
-<th>#</th><th>Img</th><th>Title</th><th>Price</th><th>Favorites</th><th>Sales/mo</th><th>Revenue</th><th>Competition</th><th>Age</th><th>Badge</th><th>Etsy</th>
+<th>#</th><th>Img</th><th>Title</th><th>Price</th><th>Favorites</th><th>Reviews</th><th>Sales/mo</th><th>Revenue</th><th>Competition</th><th>Age</th><th>Badge</th><th>Etsy</th>
 </tr>
 </thead>
 <tbody>
@@ -809,15 +900,15 @@ ${list.map((p,i)=>{const compClass=p.d==='easy'?'comp-easy':p.d==='medium'?'comp
 <td class="row-title"><a href="${p.url}" target="_blank" rel="noopener">${p.name}</a><span class="row-sub">${p.niche} · relevance ${p.relevance}</span></td>
 <td><div class="metric-strong">$${p.price}</div></td>
 <td><div class="metric-strong">${p.favs.toLocaleString()}</div></td>
+<td><div class="metric-strong">${p.reviews.toLocaleString()}</div></td>
 <td><div class="metric-strong">${p.sales}</div><div class="metric-soft">estimated</div></td>
 <td><div class="metric-strong">$${p.rev.toLocaleString()}</div><div class="metric-soft">monthly est.</div></td>
 <td><span class="comp-pill ${compClass}">${p.d}</span></td>
-<td><div class="metric-strong">${p.ageLabel}</div><div class="metric-soft">${p.ageDays} days</div></td>
+<td><div class="metric-strong">${p.ageLabel}</div></td>
 <td><span class="badge-pill ${badgeClass}">${p.badge}</span></td>
 <td><a class="link-btn" href="${p.url}" target="_blank" rel="noopener">Open</a></td>
 </tr>`}).join('')}
-</tbody>
-</table>`;
+</tbody></table>`;
 }
 function getFilteredProducts(){
   let list=[...PRODUCTS];
@@ -842,7 +933,7 @@ function getFilteredProducts(){
 function applyCurrentFilters(){
   const list=getFilteredProducts();
   renderProducts(list);
-  document.getElementById('rCount').textContent=`${list.length} products found · Query: ${LAST_QUERY} · Mode: ${getSearchMode()}`;
+  document.getElementById('rCount').textContent=`${list.length} products found · Query: ${LAST_QUERY} · Mode: ${getSearchMode()}${LAST_INTENT?` · Intent: ${LAST_INTENT.id}`:''}`;
 }
 function filterProducts(type,btn){
   CURRENT_FILTER=type;
